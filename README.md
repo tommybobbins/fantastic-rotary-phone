@@ -41,9 +41,15 @@ Jul  4 12:43:21 cks-primary kubelet[12208]: E0704 12:43:21.625949   12208 kubele
 NotReady message:Network plugin returns error: cni plugin not initialized"
 ```
 
-. This is because the [killer.sh startup script](https://raw.githubusercontent.com/killer-sh/cks-course-environment/master/cluster-setup/latest/install_master.sh) does not always install CNI properly, so re-run the correct part of the install script.
+This is because the [killer.sh startup script](https://raw.githubusercontent.com/killer-sh/cks-course-environment/master/cluster-setup/latest/install_master.sh) does not always install CNI properly, so re-run the correct part of the install script.
 
 ```
 ### CNI
 kubectl apply -f https://raw.githubusercontent.com/killer-sh/cks-course-environment/master/cluster-setup/calico.yaml
+```
+Shutting down instances:
+
+```
+# gcloud compute instances stop cks-primary
+# gcloud compute instances stop cks-secodary
 ```
