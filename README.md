@@ -30,3 +30,20 @@ https://console.cloud.google.com/projectselector/iam-admin/serviceaccounts?suppo
 Use terraform destroy to remove instances
 
     terraform destroy -var-file=secret.tfvars --auto-approve
+
+## Gotchas
+
+You may get an error to say the Nodes are not ready and coredns remains in a stuck state.  Look for errors similar to this in /var/log/syslog:
+
+```
+Jul  4 12:43:21 cks-primary kubelet[12208]: E0704 12:43:21.625949   12208 kubelet.go:2386] 
+"Container runtime network not ready" networkReady="NetworkReady=false reason:NetworkPlugin
+NotReady message:Network plugin returns error: cni plugin not initialized"
+```
+
+. This is because the [killer.sh startup script](https://raw.githubusercontent.com/killer-sh/cks-course-environment/master/cluster-setup/latest/install_master.sh) does not always install CNI properly, so re-run the correct part of the install script.
+
+```
+### CNI
+kubectl apply -f https://raw.githubusercontent.com/killer-sh/cks-course-environment/master/cluster-setup/calico.yaml
+```
