@@ -19,3 +19,7 @@ variable "user" {
   description = "The username to create on the remote server"
   default     = "tng"
 }
+
+locals {
+  region_user_project = "${var.region}-${var.user}-${var.project}"
+}

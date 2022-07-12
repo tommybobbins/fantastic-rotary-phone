@@ -2,7 +2,7 @@ resource "google_compute_instance" "primary" {
   name         = "cks-primary"
   machine_type = "e2-medium"
   zone         = "${var.region}-c"
-  tags = ["hostname", "primary", "k8s", "udemy", "cks"]
+  tags = ["hostname", "primary", "k8s", "udemy", "cks", "${local.region_user_project}"]
 
   boot_disk {
     initialize_params {
