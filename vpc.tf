@@ -1,23 +1,19 @@
-resource "google_compute_network" "example-k8s" {
-  name                    = "example-k8s"
+resource "google_compute_network" "network" {
+  name                    = "test-network"
   auto_create_subnetworks = false
 }
 
-resource "google_compute_subnetwork" "k8s-nodes" {
-  name          = "k8s-nodes"
+resource "google_compute_subnetwork" "subnetwork" {
+  name          = "subnetwork"
   ip_cidr_range = "10.132.23.0/24"
   region        = var.region
-  network       = google_compute_network.example-k8s.id
-  #  secondary_ip_range {
-  #    range_name    = "tf-test-secondary-range-update1"
-  #    ip_cidr_range = "192.168.10.0/24"
-  #  }
+  network       = google_compute_network.network.id
 }
 
 resource "google_compute_firewall" "internal" {
   project     = var.project
-  name        = "internal-k8s-firewall"
-  network     = google_compute_network.example-k8s.name
+  name        = "test-firewall"
+  network     = google_compute_network.network.name
   description = "No internal firewall rules"
 
   allow {
@@ -36,32 +32,6 @@ resource "google_compute_firewall" "internal" {
     protocol = "udp"
   }
 
-  source_tags = ["k8s"]
-  target_tags = ["k8s"]
-}
-
-resource "google_compute_firewall" "rules" {
-  project     = var.project
-  name        = "k8s-firewall"
-  network     = google_compute_network.example-k8s.name
-  description = "Creates firewall rule targeting tagged instances"
-
-  allow {
-    protocol = "tcp"
-    ports    = ["80", "22","443", "8080", "30000-32500"]
-  }
-
-  allow {
-    protocol = "icmp"
-  }
-
-  allow {
-    protocol = "ipip"
-  }
-
-  allow {
-    protocol = "udp"
-  }
-
-  source_ranges = ["0.0.0.0/0"]
+  source_tags = ["test"]
+  target_tags = ["test"]
 }

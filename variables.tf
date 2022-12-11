@@ -15,11 +15,37 @@ variable "credentials_file" {
   default     = "credentials.json"
 }
 
-variable "user" {
-  description = "The username to create on the remote server"
-  default     = "tng"
+variable "env" {
+  description = "Project environment"
+  default     = "dev"
+}
+
+variable "alias" {
+  description = "Project alias"
+  default     = "gb"
+}
+
+variable "cost_centre" {
+  description = "Project Cost Centre"
+  default     = "costly"
+}
+
+variable "thisproject" {
+  description = "Project Name"
+  default     = "projectly"
 }
 
 locals {
-  region_user_project = "${var.region}-${var.user}-${var.project}"
+  project_labels = {
+    "env"         = var.env
+    "alias"       = var.alias
+    "cost_centre" = var.cost_centre
+    "project"     = var.thisproject
+    "gcp_project" = var.project
+  }
+}
+
+variable "project_lifecycle" {
+  description = "Project lifecycle (future production environment can be in development)"
+  default     = "live"
 }
