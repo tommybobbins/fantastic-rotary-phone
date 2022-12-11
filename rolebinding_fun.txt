@@ -1,0 +1,22 @@
+controlplane $ kubectl create serviceaccount pipeline -n ns1
+serviceaccount/pipeline created
+controlplane $ kubectl create serviceaccount pipeline -n ns2
+serviceaccount/pipeline created
+
+
+controlplane $ kubectl create clusterrolebinding pipeline-view-ns2 --clusterrole=view --serviceaccount ns2:pipeline -n ns2
+clusterrolebinding.rbac.authorization.k8s.io/pipeline-view-ns2 created
+controlplane $ kubectl create clusterrolebinding pipeline-view-ns1 --clusterrole=view --serviceaccount ns1:pipeline -n ns1
+clusterrolebinding.rbac.authorization.k8s.io/pipeline-view-ns1 created
+
+
+controlplane $ kubectl create role create-delete-deployments-n1 -n ns1 --verb=create,delete --resource=deployments 
+role.rbac.authorization.k8s.io/create-delete-deployments-n1 created
+controlplane $ kubectl create role create-delete-deployments-n2 -n ns2 --verb=create,delete --resource=deployments 
+role.rbac.authorization.k8s.io/create-delete-deployments-n2 created
+
+
+controlplane $ kubectl create rolebinding ns1-cdd --role=create-delete-deployments-n1 -n ns1 --serviceaccount ns1:pipeline
+rolebinding.rbac.authorization.k8s.io/ns1-cdd created
+controlplane $ kubectl create rolebinding ns2-cdd --role=create-delete-deployments-n2 -n ns2 --serviceaccount ns2:pipeline
+rolebinding.rbac.authorization.k8s.io/ns2-cdd created
